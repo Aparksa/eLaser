@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8_decode" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Rayon laser pointé sur un aéronef " />
+    <meta name="author" content="Cédric COLLARDEAU" />
+    <title>Formulaire LASER</title>
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Bootstrap -->
+    <!-- Latest compiled and minified CSS -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+      crossorigin="anonymous"
+    />
+    <!-- Optional theme -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+      integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+      crossorigin="anonymous"
+    />
+    <!-- Latest compiled and minified JavaScript -->
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+      integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+      crossorigin="anonymous"
+    ></script>
+
+    <style>
+      hr {
+        margin: 0;
+      }
+
+      .checkbox label:after,
+      .radio label:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+
+      .checkbox .cr,
+      .radio .cr {
+        position: relative;
+        display: inline-block;
+        border: 1px solid #a9a9a9;
+        border-radius: 0.25em;
+        width: 1.3em;
+        height: 1.3em;
+        /* float: left; */
+        margin-right: 0.5em;
+      }
+
+      .radio .cr {
+        border-radius: 50%;
+      }
+
+      .checkbox .cr .cr-icon,
+      .radio .cr .cr-icon {
+        position: absolute;
+        font-size: 0.8em;
+        line-height: 0;
+        top: 50%;
+        left: 20%;
+      }
+
+      .radio .cr .cr-icon {
+        margin-left: 0.04em;
+      }
+
+      .checkbox label input[type="checkbox"],
+      .radio label input[type="radio"] {
+        display: none;
+      }
+
+      .checkbox label input[type="checkbox"] + .cr > .cr-icon,
+      .radio label input[type="radio"] + .cr > .cr-icon {
+        transform: scale(3) rotateZ(-20deg);
+        opacity: 0;
+        transition: all 0.3s ease-in;
+      }
+
+      .checkbox label input[type="checkbox"]:checked + .cr > .cr-icon,
+      .radio label input[type="radio"]:checked + .cr > .cr-icon {
+        transform: scale(1) rotateZ(0deg);
+        opacity: 1;
+      }
+
+      .checkbox label input[type="checkbox"]:disabled + .cr,
+      .radio label input[type="radio"]:disabled + .cr {
+        opacity: 0.5;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header></header>
+
+    <div class="container">
+      <h1>Rayon laser pointé sur un aéronef</h1>
+      <p>
+        formulaire de notification à la BGTA de la Réunion
+      </p>
+    </div>
+
+    <div class="container" style="max-width:560px">
+      <!-- Panneau "Quand" -->
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            A - Date et heure (locale) de l’événement :
+          </h3>
+        </div>
+        <div class="panel-body">
+          <div class="form-group">
+            <label for="id_date">Date</label>
+            <input type="date" class="form-control" id="id_date" />
+          </div>
+          <div class="form-group">
+            <label for="heure_locale">Heure locale</label>
+            <input type="time" class="form-control" id="heure_locale" />
+          </div>
+        </div>
+      </div>
+      <!-- Panneau "Aéronef" -->
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h3 class="panel-title">B - Identification de l'aéronef :</h3>
+        </div>
+        <div class="panel-body">
+          <div class="form-group">
+            <label for="id_immatriculation">Immatriculation</label>
+            <input
+              type="text"
+              class="form-control"
+              id="id_immatriculation"
+              placeholder="Ex : UU974"
+            />
+          </div>
+          <div class="form-group">
+            <label for="id_cie">Compagnie aérienne, Société, autre</label>
+            <input
+              type="text"
+              class="form-control"
+              id="id_cie"
+              placeholder="Ex : Air Austral"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Panneau "Situation" -->
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            C - Situation de l’aéronef au moment des faits :
+          </h3>
+        </div>
+        <div class="panel-body">
+          <div class="col-xs-9" style="text-align: left; padding-top: 9px;">
+            <div id="radio_evolution">
+              <input
+                type="radio"
+                name="r_evolution"
+                value="en phase de décollage"
+                checked
+              /><span style="margin-right:10px;"> en phase de décollage </span>
+              <br />
+              <input
+                type="radio"
+                name="r_evolution"
+                value=" en phase d’approche finale (-5Nm)"
+              /><span style="margin-right:10px;">
+                en phase d’approche finale (-5Nm)</span
+              >
+              <input type="radio" name="r_evolution" value=" en route " /><span
+                style="margin-right:10px;"
+              >
+                en route
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panneau "Localisation" -->
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h3 class="panel-title">D - Localisation du phénomène :</h3>
+        </div>
+        <div class="panel-body">
+          <div class="col-xs-9" style="text-align: left; padding-top: 9px;">
+            <div id="radio_localisation">
+              <input
+                type="radio"
+                name="r_localisation"
+                value=" dans l’axe de l’aéronef (+/-20 degrés)"
+                checked
+              /><span style="margin-right:10px;">
+                dans l’axe de l’aéronef (+/-20 degrés)
+              </span>
+              <br />
+              <input
+                type="radio"
+                name="r_localisation"
+                value=" par le travers "
+              /><span style="margin-right:10px;"> par le travers </span>
+            </div>
+            <br />
+            <div class="form-group">
+              <label for="id_localisation">
+                Point de planimétrie ou tout autre élément permettant la
+                localisation de la source
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="id_localisation"
+                placeholder=""
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panneau "Incidence" -->
+      <div class="panel panel-danger">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            E - Incidence sur la navigation de l’aéronef et l’équipage :
+          </h3>
+        </div>
+        <div class="panel-body">
+          <div class="row checkbox">
+            <label for="rdg" style="font-weight: normal">
+              <input id="rdg"" type="checkbox" value="remise de gaz">
+              <span class="cr"
+                ><i class="cr-icon glyphicon glyphicon-ok"></i
+              ></span>
+              Remise de gaz
+            </label>
+          </div>
+          <div class="row checkbox">
+            <label for="évitement" style="font-weight: normal">
+              <input
+                id="évitement"
+                type="checkbox"
+                value="manœuvre d’évitement"
+              />
+              <span class="cr"
+                ><i class="cr-icon glyphicon glyphicon-ok"></i
+              ></span>
+              Manœuvre d’évitement
+            </label>
+          </div>
+          <div class="row checkbox">
+            <label for="cdv" style="font-weight: normal">
+              <input
+                id="cdv"
+                type="checkbox"
+                value="action sur les commandes de vol"
+              />
+              <span class="cr"
+                ><i class="cr-icon glyphicon glyphicon-ok"></i
+              ></span>
+              Action sur les commandes de vol
+            </label>
+          </div>
+          <div class="row checkbox">
+            <label for="gene-na" style=" font-weight: normal">
+              <input
+                id="gene-na"
+                type="checkbox"
+                value="le signalement par l’équipage constitue une gêne à la navigation aérienne"
+              />
+              <span class="cr"
+                ><i class="cr-icon glyphicon glyphicon-ok"></i
+              ></span>
+              Le signalement par l’équipage constitue une gêne à la navigation
+              aérienne
+            </label>
+          </div>
+          <div class="row checkbox">
+            <label for="risque-na" style=" font-weight: normal">
+              <input
+                id="risque-na"
+                type="checkbox"
+                value="le signalement par l’équipage constitue un risque à la navigation aérienne"
+              />
+              <span class="cr"
+                ><i class="cr-icon glyphicon glyphicon-ok"></i
+              ></span>
+              Le signalement par l’équipage constitue un risque à la navigation
+              aérienne
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panneau "Parking" -->
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            F - Parking prévu pour le poste de stationnement :
+          </h3>
+        </div>
+        <div class="panel-body">
+          <div class="form-group">
+            <label for="pkg">Parking n°</label>
+            <select class="form-control" id="pkg">
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+              <option>7</option>
+              <option>8</option>
+              <option>9</option>
+              <option>10</option>
+              <option>11</option>
+              <option>12</option>
+              <option>13</option>
+              <option>14</option>
+              <option>15</option>
+              <option>16</option>
+              <option>17</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panneau "en plus.." -->
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            G - Eléments supplémentaires de procédure :
+          </h3>
+        </div>
+        <div class="panel-body">
+          <div class="form-group">
+            <label for="id_whatmore"></label>
+            <textarea class="form-control" rows="5" id="id_whatmore"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panneau "plainte" -->
+      <div class="panel panel-danger">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            H - L’équipage souhaite-t-il déposer plainte ?
+          </h3>
+        </div>
+        <div class="panel-body">
+          <label class="radio-inline"
+            ><input type="radio" name="o_plainte" checked value=" Oui" />
+            Oui</label
+          >
+          <label class="radio-inline"
+            ><input type="radio" name="o_plainte" value=" Non" /> Non</label
+          >
+        </div>
+      </div>
+
+      <div class="row" id="buttons">
+        <div class="col-xs-6" style="text-align: left">
+          <button
+            id="validate_LASER_btn"
+            type="text"
+            class="btn btn-primary"
+            onclick="generateLASERbody()"
+            style="margin-right:10px;"
+          >
+            <span
+              class="glyphicon glyphicon-plane"
+              aria-hidden="true"
+              style="margin-right: 7px;"
+            ></span>
+            Générer et valider le message Laser
+          </button>
+        </div>
+        <div class="col-xs-6" style="text-align: right">
+          <button
+            id="send_LASER_btn"
+            type="text"
+            class="btn btn-success"
+            onclick="sendLASER()"
+            style="display:none;"
+          >
+            <span
+              class="glyphicon glyphicon-envelope"
+              aria-hidden="true"
+              style="margin-right: 7px;"
+            ></span>
+            Envoyer le message LASER
+          </button>
+        </div>
+        <div class="col-xs-12" style="text-align: center; margin-top: 10px">
+          <button
+            id="reload_btn"
+            type="text"
+            class="btn btn-danger"
+            onclick="window.location.reload(true);"
+            style="width:100%; display:none;"
+          >
+            <span
+              class="glyphicon glyphicon-refresh"
+              aria-hidden="true"
+              style="margin-right: 7px;"
+            ></span>
+            Reset
+          </button>
+        </div>
+      </div>
+
+      <!-- Aperçu du message que l'on va envoyer à la BGTA -->
+      <textarea
+        id="LASERbody"
+        rows="17"
+        style="width:100%; border: 2px solid black; border-radius:10px; padding:10px; margin-top: 10px; margin-bottom: 10px; font-style:italic;resize: vertical;"
+        placeholder="Le contenu du message LASER sera affiché ici après validation."
+        readonly
+      ></textarea>
+    </div>
+
+    <footer></footer>
+  </body>
+
+  <script>
+    function generateLASERbody() {
+      var today = new Date();
+      var dd = today.getDate();
+      var mm = today.getMonth() + 1;
+      var yyyy = today.getFullYear();
+      var then = "";
+      var incident = document.querySelector('input[type="checkbox"]:checked');
+
+      if (incident !== null) {
+        then +=
+          "" +
+          document.querySelector('input[type="checkbox"]:checked').value +
+          "\n";
+      }
+
+      if (incident == null) {
+        then += "" + "\n";
+      }
+
+      // L'entête du message est à adapter selon le centre
+      var body =
+        "MESSAGE DE LA TOUR DE CONTRÔLE ROLAND-GARROS LE " +
+        dd +
+        "/" +
+        mm +
+        "/" +
+        yyyy +
+        "\n" +
+        "" +
+        "\n" +
+        "----------------------------------------------" +
+        "\n" +
+        "Rayon laser pointé sur un aéronef" +
+        "\n" +
+        "----------------------------------------------" +
+        "\n" +
+        "" +
+        "\n" +
+        "A - Date et heure de l'évènement : " +
+        "\n" +
+        "A1 - Date : " +
+        document.getElementById("id_date").value +
+        "\n" +
+        "A2 - Heure Locale : " +
+        document.getElementById("heure_locale").value +
+        "\n" +
+        "B - Identification de l'aéronef : " +
+        "\n" +
+        "B1 - Immatriculation : " +
+        document.getElementById("id_immatriculation").value +
+        "\n" +
+        "B2 - Compagnie aérienne, Société, autre : " +
+        document.getElementById("id_cie").value +
+        "\n" +
+        "C -  Situation de l’aéronef au moment des faits : " +
+        document.querySelector('input[name="r_evolution"]:checked').value +
+        "\n" +
+        "D - Localisation du phénomène :" +
+        document.querySelector('input[name="r_localisation"]:checked').value +
+        "\n" +
+        "D1 - Point de planimétrie ou tout autre élément : " +
+        document.getElementById("id_localisation").value +
+        "\n" +
+        "E - Incidence sur la navigation de l’aéronef et l’équipage :" +
+        "\n" +
+        incident +
+        "F - Parking prévu pour le poste de stationnement : P" +
+        document.getElementById("pkg").value +
+        "\n" +
+        "G - Eléments supplémentaires de procédure : " +
+        document.getElementById("id_whatmore").value +
+        "\n" +
+        "H - L’équipage souhaite-t-il déposer plainte ? :" +
+        document.querySelector('input[name="o_plainte"]:checked').value;
+
+      document.getElementById("LASERbody").value = body;
+      document.getElementById("send_LASER_btn").style.display = "inline";
+      document.getElementById("reload_btn").style.display = "inline";
+    }
+
+    // Fonction qui ouvre le client de messagerie lors du clic sur le bouton "envoyer", pour envoie à la BGTA du message eLASER
+    function sendLASER() {
+      // link : variable à adapter
+      var link =
+        "mailto:bgta.st-denis-la-reunion@gendarmerie.interieur.gouv.fr?cc=:sna-oi-se@aviation-civile.gouv.fr;LASERs.sna-oi@aviation-civile.gouv.fr&subject=Message LASER du SNA-OI&body=" +
+        encodeURIComponent(document.getElementById("LASERbody").value);
+      window.location.href = link;
+    }
+  </script>
+</html>

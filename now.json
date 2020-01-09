@@ -1,0 +1,12 @@
+{
+  "name": "Formulaire de notification à la BGTA de la Réunion",
+  "version": 2,
+  "alias": ["elaser.now.sh"],
+  "github": {
+    "autoAlias": true
+  },
+  "builds": [
+    { "src": "index.html", "use": "@now/html-minifier" },
+    { "src": "sitemap.txt", "use": "@now/static" }
+  ]
+}
